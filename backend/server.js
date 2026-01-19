@@ -1,9 +1,13 @@
 // dependencies
 import express from 'express';
-import 'dotenv/config';
+import http from 'http';
+import { WebSocketServer } from 'ws';
+
 
 // miljövariabler
 const app = express();
+
+
 
 const PORT = 8080;
 // statiska filer
