@@ -70,10 +70,8 @@ wss.on('connection', (ws) => {
 
         console.log(obj);
 
-        wss.clients.forEach(client => {
-            client.send(JSON.stringify(obj));
-        });
-
+        // broadcast(wss, obj); 
+        broadcastExclude(wss, ws, obj);
     });
 
 
@@ -96,8 +94,20 @@ server.listen(PORT, () => {
 
 
 // hjälpfunktioner
+function broadcast(wss, obj) {
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify(obj));
+    });
+}
 
+// funktion som exkluderar en client
+function broadcastExclude(wss, ws, obj) {
+    wss.clients.forEach(client => {
 
-
+        if (client !== ws) {
+            client.send(JSON.stringify(obj));
+        }
+    });
+}
 
 // ----

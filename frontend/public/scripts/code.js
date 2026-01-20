@@ -44,6 +44,9 @@ formMessage.addEventListener("submit", (e) => {
     const msg = msgElement.value;
     const obj = { msg: msg, username: username };
 
+    // skriver man själv ett meddelande i chatten bör det renderas direkt
+    renderChatMessage(obj);
+
     websocket.send(JSON.stringify(obj));
 });
 
@@ -74,6 +77,9 @@ function renderChatMessage(obj) {
     p.textContent = obj.msg;
 
     chatElement.appendChild(p);
+
+
+    // applicera klass på vem som skriver
 
 
 
