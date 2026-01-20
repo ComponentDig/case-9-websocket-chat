@@ -1,3 +1,11 @@
 body {
     font-family: monospace;
 }
+
+/* section#chatStage {
+    
+} */
+
+.hidden {
+    display: none;
+}

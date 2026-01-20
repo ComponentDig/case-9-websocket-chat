@@ -1,32 +1,32 @@
-// dependencies
+// DEPENDENCIES
 import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 
 
-// miljövariabler
+// VARIABLES
 const app = express();
 
 const PORT = 8080;
 
-// statiska filer
+// STATIC FILES
 app.use(express.static('../frontend/public'));
 
 // -----
 
-// skapa en http server, express skickas med som en instans
+// CREATE HTTP SERVER, express skickas med som en instans
 const server = http.createServer(app);
 
 
 
 // -----
 
-// skapa en websocket server
+// CREATE WEBSOCKET SERVER
 const wss = new WebSocketServer({ noServer: true });
 
 // -------
 
-// handshake - godkänn kommunikation via websocket
+// HANDSHAKE - godkänn kommunikation via websocket
 server.on("upgrade", (req, socket, head) => {
 
     console.log("event upgrade...");
@@ -63,11 +63,24 @@ wss.on('connection', (ws) => {
         console.log(`Klient lämnade, klienter kvar: ${wss.clients.size}`);
     });
 
+    // lyssna på event av sorten message
+    ws.on('message', (data) => {
+
+        const obj = JSON.parse(data);
+
+        console.log(obj);
+
+        wss.clients.forEach(client => {
+            client.send(JSON.stringify(obj));
+        });
+
+    });
 
 
 });
 
 // -----
+
 
 
 // starta server 

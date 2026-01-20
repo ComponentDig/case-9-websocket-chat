@@ -13,16 +13,30 @@
 
     <h1>DoodleDash</h1>
 
-    <form action="">
+    <!-- formulär som anger vem man är -->
+    <form id="formUsername" action="">
 
-        <input type="text" name="msg" id="msg" placeholder="Skriv...">
+        <input type="text" name="username" id="username" placeholder="Whats your name?">
 
-        <input type="submit" value="Skicka">
+        <input type="submit" value="Chatta">
 
     </form>
 
-    <div id="chatbox"></div>
 
+    <section id="chatStage" class="hidden">
+
+        <!-- formulär för att skriva meddelenade -->
+        <form id="formMessage" action="">
+
+            <input type="text" name="msg" id="msg" placeholder="Skriv...">
+
+            <input type="submit" value="Skicka">
+
+        </form>
+
+        <div id="chatbox"></div>
+
+    </section>
 
     <script src="scripts/code.js"></script>
 </body>
