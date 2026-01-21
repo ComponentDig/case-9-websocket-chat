@@ -41,7 +41,16 @@ server.on("upgrade", (req, socket, head) => {
     });
 });
 
-// -----
+
+// array med 3-4 användare
+let users = ["Kim FukkaYoo", "JenniDooDoo", "Josefaan"];
+
+// eventuellt hålla koll på vilka aktiva användare
+let usersOnline = [];
+
+
+
+
 
 // middleware
 
@@ -53,7 +62,26 @@ app.use(express.json());
 
 // route 
 app.post('/login', (req, res) => {
-    console.log("A post request...");
+    console.log("A post request...", req.body);
+
+    let username = req.body.username;
+
+    if (users.includes(username)) {
+        console.log("Användare finns");
+
+        users = users.filter((u) => u != username);
+
+        console.log("Användare som finns kvar:", users);
+
+        // bekräfta om användarnamnet är okej
+        // skicka ett objekt
+        res.send({ authenticated: true, username: username });
+
+        usersOnline.push(username);
+
+    } else {
+        res.send({ authenticated: false });
+    }
 
 });
 
@@ -69,12 +97,13 @@ wss.on('connection', (ws) => {
 
     console.log(`Antal klienter anslutna: ${wss.clients.size}`);
 
-    const obj = { msg: "Ny klient ansluten" };
+    const obj = { msg: "Ny klient ansluten", usersOnline: usersOnline };
 
     ws.send(JSON.stringify(obj));
 
 
     ws.on('close', () => {
+        // uppdatera usersOnline, skicka till samtliga klienter, aktuell lista på aktiva användare
         console.log(`Klient lämnade, klienter kvar: ${wss.clients.size}`);
     });
 
