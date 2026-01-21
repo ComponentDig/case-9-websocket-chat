@@ -31,6 +31,8 @@ server.on("upgrade", (req, socket, head) => {
 
     console.log("event upgrade...");
 
+
+
     wss.handleUpgrade(req, socket, head, (ws) => {
         console.log("Client:", req.headers['user-agent']);
 
@@ -43,7 +45,20 @@ server.on("upgrade", (req, socket, head) => {
 
 // middleware
 
-// ta emot http POST request
+
+// hur kan vi ta emot http POST request
+app.use(express.json());
+
+
+
+// route 
+app.post('/login', (req, res) => {
+    console.log("A post request...");
+
+});
+
+
+
 
 
 // -------

@@ -21,12 +21,20 @@ let username;
 // EVENTLISTENER
 formUsername.addEventListener("submit", (e) => {
     e.preventDefault();
-    console.log(usernameElement.value);
+
+    // asynkron fetch
+    const endpoint = "http://localhost:8080/login";
+
+    const options = {
+        method: "POST"
+    };
+
+    fetch(endpoint, options).then(res => res.text()).then((data) => {
+        console.log("data", data);
+    });
 
     username = usernameElement.value;
-
     usernameElement.setAttribute("disabled", true);
-
     chatStage.classList.remove("hidden");
 
 });
