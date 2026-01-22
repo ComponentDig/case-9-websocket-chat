@@ -9,3 +9,12 @@ body {
 .hidden {
     display: none;
 }
+
+#chatbox div.textMessage {
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#chatbox div.other {
+    text-align: right;
+}

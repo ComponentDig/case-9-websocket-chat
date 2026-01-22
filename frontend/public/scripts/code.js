@@ -38,6 +38,7 @@ formUsername.addEventListener("submit", (e) => {
 
     fetch(endpoint, options).then(res => res.text()).then((data) => {
         console.log("data", data);
+        
 
         usernameElement.setAttribute("disabled", true);
         chatStage.classList.remove("hidden");
@@ -61,7 +62,7 @@ formMessage.addEventListener("submit", (e) => {
     console.log("yes yes yes");
 
     const msg = msgElement.value;
-    const obj = { msg: msg, username: username };
+    const obj = { type: "text", msg: msg, username: username };
 
     // skriver man själv ett meddelande i chatten bör det renderas direkt
     renderChatMessage(obj);
@@ -84,7 +85,19 @@ websocket.addEventListener("message", (e) => {
     const obj = JSON.parse(e.data);
     console.log("obj", obj);
 
-    renderChatMessage(obj);
+
+    // ta hjöd för att meddelande via websocket kan har olika typ, ex text eller draw
+
+    // om det är av type === text används metoden renderChatMessage
+
+    switch (obj.type) {
+        case "text":
+            renderChatMessage(obj);
+            break;
+    }
+
+
+
 });
 
 // FUNCTIONS
@@ -92,15 +105,30 @@ websocket.addEventListener("message", (e) => {
 // funktion som kan rendera textmeddelande
 function renderChatMessage(obj) {
 
+    let div = document.createElement("div");
     const p = document.createElement("p");
-    p.textContent = obj.msg;
 
-    chatElement.appendChild(p);
 
 
     // applicera klass på vem som skriver
+    if (obj.username !== username) {
+        div.classList = "textMessage other";
+    } else {
+        div.classList = "textMessage";
+    }
 
+    p.textContent = obj.msg;
+    p.classList = "text";
+    div.appendChild(p);
 
+    // användarnamn
+    let divUsename = document.createElement("div");
+    divUsename.textContent = obj.username;
+    divUsename.classList = "username";
+
+    div.appendChild(divUsename);
+
+    chatElement.appendChild(div);
 
 }
 

@@ -112,10 +112,15 @@ wss.on('connection', (ws) => {
 
         const obj = JSON.parse(data);
 
+        switch (obj.type) {
+            case "text":
+                broadcastExclude(wss, ws, obj);
+                break;
+        }
+
         console.log(obj);
 
-        // broadcast(wss, obj); 
-        broadcastExclude(wss, ws, obj);
+
     });
 
 
