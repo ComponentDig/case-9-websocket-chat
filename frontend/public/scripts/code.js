@@ -15,7 +15,7 @@ const websocket = new WebSocket("ws://localhost:8080");
 
 // VARIABLES
 let username;
-
+let authenticated = false;
 
 
 
@@ -36,25 +36,26 @@ formUsername.addEventListener("submit", (e) => {
         body: JSON.stringify({ username: username })
     };
 
-    fetch(endpoint, options).then(res => res.text()).then((data) => {
-        console.log("data", data);
-        
-
-        usernameElement.setAttribute("disabled", true);
-        chatStage.classList.remove("hidden");
+    fetch(endpoint, options)
+        .then(res => res.text())
+        .then((data) => {
+            console.log("data", data);
 
 
-    });
+            if (data.authenticated === true) {
+                authenticated = true;
+                username = data.username;
 
+                console.log("authenticated", authenticated, "username", username);
 
+                usernameElement.setAttribute("disabled", true);
+                chatStage.classList.remove("hidden");
 
+                msgElement.focus();
 
+            }
+        });
 });
-
-
-
-
-
 
 formMessage.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -68,6 +69,12 @@ formMessage.addEventListener("submit", (e) => {
     renderChatMessage(obj);
 
     websocket.send(JSON.stringify(obj));
+
+    // nollställ textfältet
+    msgElement.value = "";
+
+    msgElement.focus();
+
 });
 
 // aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver "...is typing"
