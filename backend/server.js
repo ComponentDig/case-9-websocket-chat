@@ -77,7 +77,11 @@ app.post('/login', (req, res) => {
         // skicka ett objekt
         res.send({ authenticated: true, username: username });
 
-        usersOnline.push(username);
+        // usersOnline.push(username);
+
+        // för att användare som verifierats ska kopplas till en webbsocket klient
+        // avvakta med att uppdatera usersOnline tills dess att webbsocket är klar...
+
 
     } else {
         res.send({ authenticated: false });
@@ -104,8 +108,19 @@ wss.on('connection', (ws) => {
 
 
     ws.on('close', () => {
+
         // uppdatera usersOnline, skicka till samtliga klienter, aktuell lista på aktiva användare
         console.log(`Klient lämnade, klienter kvar: ${wss.clients.size}`);
+
+        // uppdatera listan usersOnliune så att vi vet att en specifik användare är koppla
+        // till just den här klienten, dvs 'ws'
+        // ta bort användare från usersOnline
+        // uppdatera andra klienter om händelsen
+        usersOnline = usersOnline.filter(u => u !== ws.username);
+        const obj = { type: "user_left", username: ws.username, usersOnline: usersOnline };
+
+        broadcastExclude(wss, ws, obj);
+
     });
 
     // lyssna på event av sorten message
@@ -114,17 +129,33 @@ wss.on('connection', (ws) => {
         const obj = JSON.parse(data);
 
         switch (obj.type) {
+
             case "text":
+
+                // för att visa aktuell tid för ett meddelande kan man
+                // lägga till egenskapen på server sidan
+                // då kommer tidszoner kunna implementeras
+                const date = new Date();
+
+                obj.date = date;
+
                 broadcastExclude(wss, ws, obj);
                 break;
 
             case "new_user":
 
-                if (!obj.hasOwnProperty("usersOnline")) {
-                    obj.usersOnline = usersOnline;
-                }
+                // uppdatera listan usersOnline med användaren
+                usersOnline.push(obj.username);
+                obj.usersOnline = usersOnline;
 
-                broadcastExclude(wss, ws, obj);
+                // lägg till en egenskap till det obj som nu har kolla på klientkoppling
+                ws.username = obj.username;
+
+                // if (!obj.hasOwnProperty("usersOnline")) {
+                // }
+
+                // broadcastExclude(wss, ws, obj);
+                broadcast(wss, obj);
                 break;
         }
 
