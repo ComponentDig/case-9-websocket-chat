@@ -1,5 +1,4 @@
 
-
 // DOM ELEMENT
 const formMessage = document.querySelector("#formMessage");
 const formUsername = document.querySelector("#formUsername");
@@ -37,9 +36,10 @@ formUsername.addEventListener("submit", (e) => {
     };
 
     fetch(endpoint, options)
-        .then(res => res.text())
+        .then(res => res.json())
         .then((data) => {
             console.log("data", data);
+        
 
 
             if (data.authenticated === true) {
@@ -52,6 +52,9 @@ formUsername.addEventListener("submit", (e) => {
                 chatStage.classList.remove("hidden");
 
                 msgElement.focus();
+                const obj = { type: "new_user", username: username };
+                websocket.send(JSON.stringify(obj));
+
 
             }
         });
@@ -100,6 +103,14 @@ websocket.addEventListener("message", (e) => {
     switch (obj.type) {
         case "text":
             renderChatMessage(obj);
+            break;
+
+        case "new_client":
+
+            break;
+
+        case "new_user":
+
             break;
     }
 

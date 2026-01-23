@@ -97,9 +97,10 @@ wss.on('connection', (ws) => {
 
     console.log(`Antal klienter anslutna: ${wss.clients.size}`);
 
-    const obj = { msg: "Ny klient ansluten", usersOnline: usersOnline };
+    const obj = { type: "new_client", msg: "Ny klient ansluten", usersOnline: usersOnline };
 
-    ws.send(JSON.stringify(obj));
+    // ws.send(JSON.stringify(obj));
+    broadcast(wss, obj);
 
 
     ws.on('close', () => {
@@ -114,6 +115,15 @@ wss.on('connection', (ws) => {
 
         switch (obj.type) {
             case "text":
+                broadcastExclude(wss, ws, obj);
+                break;
+
+            case "new_user":
+
+                if (!obj.hasOwnProperty("usersOnline")) {
+                    obj.usersOnline = usersOnline;
+                }
+
                 broadcastExclude(wss, ws, obj);
                 break;
         }
