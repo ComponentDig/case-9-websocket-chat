@@ -2,11 +2,11 @@
 import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
+import fs from 'fs';
 
 
 // VARIABLES
 const app = express();
-
 const PORT = 8080;
 
 // STATIC FILES
@@ -17,9 +17,6 @@ app.use(express.static('../frontend/public'));
 // CREATE HTTP SERVER, express skickas med som en instans
 const server = http.createServer(app);
 
-
-
-// -----
 
 // CREATE WEBSOCKET SERVER
 const wss = new WebSocketServer({ noServer: true });
@@ -48,6 +45,28 @@ let users = ["Kim FukkaYoo", "JenniDooDoo", "Josefaan"];
 // eventuellt hålla koll på vilka aktiva användare
 let usersOnline = [];
 
+// läs i ord från words.txt
+let words = [];
+let currentWord = "";
+let scores = {};
+
+try {
+    const data = fs.readFileSync('./words.txt', 'utf8');
+
+    words = data.split(/\r?\n/).filter(word => word.trim() !== "");
+    console.log(`ladda in ${words.length} ord`);
+} catch (error) {
+    console.error("Kunde inte läsa in från fil", error);
+}
+
+function pickNewWord() {
+    if (words.length > 0) {
+        currentWord = words[Math.floor(Math.random() * words.length)];
+        console.log("nytt ord", currentWord);
+    }
+}
+
+pickNewWord();
 
 
 
