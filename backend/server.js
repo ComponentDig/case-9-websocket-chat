@@ -150,15 +150,31 @@ wss.on('connection', (ws) => {
         switch (obj.type) {
 
             case "text":
-
-                // för att visa aktuell tid för ett meddelande kan man
-                // lägga till egenskapen på server sidan
-                // då kommer tidszoner kunna implementeras
                 const date = new Date();
-
                 obj.date = date;
 
-                broadcastExclude(wss, ws, obj);
+                // kontroll av gissning rätt/fel
+                if (obj.msg.toLowerCase().trim() === currentWord.toLocaleLowerCase().trim()) {
+                    scores[obj.username] = (scores[obj.username] || 0) + 10;
+
+                    // vinst objekt
+                    const winObj = {
+                        type: "correct_guess",
+                        username: obj.username,
+                        word: currentWord,
+                        scores: scores
+                    };
+
+                    console.log(`Rätt gissat! ${obj.username}`);
+
+                    broadcast(wss, winObj);
+
+                    pickNewWord();
+                } else {
+                    broadcastExclude(wss, ws, obj);
+
+                }
+
                 break;
 
             case "new_user":
@@ -175,6 +191,15 @@ wss.on('connection', (ws) => {
 
                 // broadcastExclude(wss, ws, obj);
                 broadcast(wss, obj);
+                break;
+
+                // tog hjälp av AI att inse att jag glömt lägga till detta i server.js för att ritandet skulle synas för alla klienter
+            case "draw":
+                broadcastExclude(wss, ws, obj);
+                break;
+
+            case "stop_draw":
+                broadcastExclude(wss, ws, obj);
                 break;
 
 

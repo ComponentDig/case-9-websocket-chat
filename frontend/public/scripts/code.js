@@ -1,3 +1,6 @@
+// canvas
+const canvas = document.querySelector("#paintCanvas");
+const ctx = canvas.getContext("2d");
 
 // DOM ELEMENT
 const formMessage = document.querySelector("#formMessage");
@@ -123,6 +126,8 @@ websocket.addEventListener("message", (e) => {
             onlineUsersElement.textContent = obj.usersOnline;
 
             break;
+
+       
     }
 
 
@@ -173,6 +178,56 @@ function renderChatMessage(obj) {
     chatElement.appendChild(div);
 
 }
+
+let painting = false;
+
+// canvas 
+function startDrawing(e) {
+    painting = true;
+    draw(e);
+}
+
+function stopDrawing() {
+    painting = false;
+    ctx.beginPath();
+    websocket.send(JSON.stringify({ type: "stop_draw" }));
+}
+
+let lastX = 0;
+let lastY = 0;
+
+function draw(e) {
+    if (!painting || !authenticated) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    drawOnCanvas(x, y);
+
+    // const drawObj = {
+    //     type: "draw",
+    //     x: x,
+    //     y: y
+    // };
+    websocket.send(JSON.stringify({ type: "draw", x, y }));
+}
+
+function drawOnCanvas(x, y) {
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "black";
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mousemove", draw);
+
 
 
 
