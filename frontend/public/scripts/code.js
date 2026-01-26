@@ -6,6 +6,7 @@ const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chatbox");
 const usernameElement = document.querySelector("#username");
 const chatStage = document.querySelector("#chatStage");
+const onlineUsersElement = chatStage.querySelector("code");
 
 // DEPENDENCIES
 const websocket = new WebSocket("ws://localhost:8080");
@@ -39,7 +40,7 @@ formUsername.addEventListener("submit", (e) => {
         .then(res => res.json())
         .then((data) => {
             console.log("data", data);
-        
+
 
 
             if (data.authenticated === true) {
@@ -67,6 +68,10 @@ formMessage.addEventListener("submit", (e) => {
 
     const msg = msgElement.value;
     const obj = { type: "text", msg: msg, username: username };
+
+    // aktuell tid
+    const date = new Date();
+    obj.date = date;
 
     // skriver man själv ett meddelande i chatten bör det renderas direkt
     renderChatMessage(obj);
@@ -110,6 +115,12 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "new_user":
+            onlineUsersElement.textContent = obj.usersOnline;
+            break;
+
+        case "user_left":
+
+            onlineUsersElement.textContent = obj.usersOnline;
 
             break;
     }
@@ -143,6 +154,19 @@ function renderChatMessage(obj) {
     let divUsename = document.createElement("div");
     divUsename.textContent = obj.username;
     divUsename.classList = "username";
+
+    // aktuell tid
+    const time = document.createElement("time");
+
+
+    const date = new Date(obj.date);
+
+
+
+
+    time.textContent = date.toLocaleTimeString();
+    time.dateTime = date.toLocaleTimeString();
+    div.appendChild(time);
 
     div.appendChild(divUsename);
 
