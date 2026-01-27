@@ -24,11 +24,25 @@
 
 
     <section id="chatStage" class="hidden">
+        <div class="game-container">
+            <div class="canvas-area">
+                <div class="score-bar">
+                    <h4>Online</h4>
+                    <code>...</code>
+                </div>
+                <canvas id="paintCanvas" width="500" height="400"></canvas>
+            </div>
+            <div class="chat-area">
+                <div id="chatbox"></div>
+                <form id="formMessage">
+                    <input type="text" name="msg" id="msg" placeholder="Gissa ordet här..">
+                    <input type="submit" value="Gissa">
+                </form>
+            </div>
+        </div>
 
-<canvas id="paintCanvas" width="500" height="400" style="border:1px solid"></canvas>
-        <h4>Online</h4>
-        <code>...</code>
-        <hr>
+
+
 
 
         <!-- formulär för att skriva meddelenade -->
@@ -44,8 +58,8 @@
 
             <div class="textMessage">
 
-                <!-- <p class="text">text</p>
-                <div class="username"></div> -->
+                <p class="text">text</p>
+                <div class="username"></div>
                 <!-- tidstämpel -->
 
             </div>

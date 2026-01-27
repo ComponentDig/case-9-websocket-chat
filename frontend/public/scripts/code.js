@@ -175,6 +175,8 @@ function renderChatMessage(obj) {
     div.appendChild(divUsename);
 
     chatElement.appendChild(div);
+
+    chatElement.scrollTop = chatElement.scrollHeight;
 }
 
 let painting = false;
