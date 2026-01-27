@@ -185,11 +185,7 @@ wss.on('connection', (ws) => {
 
                 // lägg till en egenskap till det obj som nu har kolla på klientkoppling
                 ws.username = obj.username;
-
-                // if (!obj.hasOwnProperty("usersOnline")) {
-                // }
-
-                // broadcastExclude(wss, ws, obj);
+                
                 broadcast(wss, obj);
                 break;
 

@@ -127,7 +127,33 @@ websocket.addEventListener("message", (e) => {
 
             break;
 
-       
+        case "draw":
+            drawOnCanvas(obj.x, obj.y);
+            break;
+        case "stop_draw":
+
+            ctx.beginPath();
+            break;
+
+        case "correct_guess":
+            renderChatMessage({
+                // username: 
+                msg: `Rätt gissat ${obj.username}. Ordet var: ${obj.word.toUpperCase()}`,
+                date: new Date()
+            });
+
+            // uppdatera poäng visuellt för alla användare
+            let scoreDisplay = "Poäng: ";
+            for (let user in obj.scores) {
+                scoreDisplay += `${user}: ${obj.scores[user]}`
+            }
+
+            onlineUsersElement.textContent = JSON.stringify(obj.scores);
+
+            // rensar canvas för nästa spelare att rita
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            break;
     }
 
 
@@ -205,11 +231,6 @@ function draw(e) {
 
     drawOnCanvas(x, y);
 
-    // const drawObj = {
-    //     type: "draw",
-    //     x: x,
-    //     y: y
-    // };
     websocket.send(JSON.stringify({ type: "draw", x, y }));
 }
 
