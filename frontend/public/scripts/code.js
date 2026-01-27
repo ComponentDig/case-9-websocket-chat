@@ -84,6 +84,8 @@ msgElement.addEventListener("keydown", (e) => {
     console.log("...is typing", e.key);
 });
 
+let isMyTurn = false;
+
 websocket.addEventListener("message", (e) => {
     const data = e.data;
 
@@ -107,6 +109,14 @@ websocket.addEventListener("message", (e) => {
 
             onlineUsersElement.textContent = obj.usersOnline;
 
+            break;
+
+        case "your_turn":
+            isMyTurn = true;
+            renderChatMessage({
+                msg: `Din tur! Rita: ${obj.word.toUpperCase()}`,
+                date: new Date()
+            });
             break;
 
         case "draw":
@@ -136,6 +146,17 @@ websocket.addEventListener("message", (e) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             break;
+
+        case "new_round":
+            isMyTurn = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            renderChatMessage({
+                msg: `Gör dig redo! ${obj.drawer} ritar nu`,
+                date: new Date()
+            });
+            break;
+
     }
 });
 
@@ -197,7 +218,7 @@ let lastX = 0;
 let lastY = 0;
 
 function draw(e) {
-    if (!painting || !authenticated) return;
+    if (!painting || !authenticated || !isMyTurn) return;
 
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;

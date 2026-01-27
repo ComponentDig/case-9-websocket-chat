@@ -58,6 +58,38 @@ function pickNewWord() {
 
 pickNewWord();
 
+let drawer = 0;
+let currentDrawer = null;
+
+function assignDrawer() {
+    if (usersOnline.length === 0) return;
+
+    if (drawer >= usersOnline.length) {
+        drawer = 0;
+    }
+
+    currentDrawer = usersOnline[drawer];
+    pickNewWord();
+
+    console.log(`Ny runda: ${currentDrawer} ritar ordet ${currentWord}`);
+
+    wss.clients.forEach((client) => {
+        if (client.username === currentDrawer) {
+            client.send(JSON.stringify({
+                type: "your_turn",
+                word: currentWord
+            }));
+        } else {
+            client.send(JSON.stringify({
+                type: "new_round",
+                drawer: currentDrawer
+            }));
+        }
+    });
+
+    drawer++;
+}
+
 // hur kan vi ta emot http POST request
 app.use(express.json());
 
@@ -129,7 +161,10 @@ wss.on('connection', (ws) => {
 
                     broadcast(wss, winObj);
 
-                    pickNewWord();
+                    setTimeout(() => {
+                        assignDrawer();
+                    }, 3000);
+                    // pickNewWord();
                 } else {
                     broadcastExclude(wss, ws, obj);
 
@@ -147,6 +182,10 @@ wss.on('connection', (ws) => {
                 ws.username = obj.username;
 
                 broadcast(wss, obj);
+
+                if (usersOnline.length === 1) {
+                    assignDrawer();
+                }
                 break;
 
                 // tog hjälp av AI att inse att jag glömt lägga till detta i server.js för att ritandet skulle synas för alla klienter
