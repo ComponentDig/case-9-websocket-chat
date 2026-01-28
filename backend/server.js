@@ -102,9 +102,9 @@ app.post('/login', (req, res) => {
     if (users.includes(username)) {
         console.log("Användare finns");
 
-        users = users.filter((u) => u != username);
+        // users = users.filter((u) => u != username);
 
-        console.log("Användare som finns kvar:", users);
+        // console.log("Användare som finns kvar:", users);
 
         // bekräfta om användarnamnet är okej
         // skicka ett objekt
@@ -149,22 +149,34 @@ wss.on('connection', (ws) => {
                 if (obj.msg.toLowerCase().trim() === currentWord.toLocaleLowerCase().trim()) {
                     scores[obj.username] = (scores[obj.username] || 0) + 10;
 
-                    // vinst objekt
-                    const winObj = {
-                        type: "correct_guess",
-                        username: obj.username,
-                        word: currentWord,
-                        scores: scores
-                    };
+                    // kontrollerar om en spelare har uppnått 40 poäng
+                    if (scores[obj.username] >= 40) {
+                        const finishedObj = {
+                            type: "game_over",
+                            winner: obj.username,
+                            scores: scores
+                        }
+                        // Gemini hjälpte till att hitta att jag glömt att broadcasta ut finishedObj
+                        broadcast(wss, finishedObj);
+
+                    } else {
+                        const winObj = {
+                            type: "correct_guess",
+                            username: obj.username,
+                            word: currentWord,
+                            scores: scores
+                        };
+                        broadcast(wss, winObj);
+
+                        setTimeout(() => {
+                            assignDrawer();
+                        }, 3000);
+
+                    }
+
 
                     console.log(`Rätt gissat! ${obj.username}`);
 
-                    broadcast(wss, winObj);
-
-                    setTimeout(() => {
-                        assignDrawer();
-                    }, 3000);
-                    // pickNewWord();
                 } else {
                     broadcastExclude(wss, ws, obj);
 
@@ -188,7 +200,7 @@ wss.on('connection', (ws) => {
                 }
                 break;
 
-                // tog hjälp av AI att inse att jag glömt lägga till detta i server.js för att ritandet skulle synas för alla klienter
+            // tog hjälp av Gemini att inse att jag glömt lägga till detta i server.js för att ritandet skulle synas för alla klienter
             case "draw":
                 broadcastExclude(wss, ws, obj);
                 break;

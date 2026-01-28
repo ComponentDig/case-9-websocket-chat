@@ -159,6 +159,21 @@ websocket.addEventListener("message", (e) => {
             });
             break;
 
+        case "game_over":
+            isMyTurn = false;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            renderChatMessage({
+                username: "MÄSTARE",
+                msg: `GRATTIS ${obj.winner.toUpperCase()}! Du vann spelet`,
+                date: new Date()
+            });
+
+            onlineUsersElement.textContent = "Spelet är slut! Vinnare är: " + obj.winner;
+            break;
+
+
+
     }
 });
 
@@ -197,9 +212,16 @@ function renderChatMessage(obj) {
 
     div.appendChild(divUsename);
 
-    chatElement.appendChild(div);
+    // visning av vem som vunnit
+    if (obj.username === "MÄSTARE") {
+        div.style.background = "#ffd700";
+        div.style.border = "2px solid orange";
+        div.style.fontWeight = "bold";
+        div.style.textAlign = "center";
+    }
 
-    chatElement.scrollTop = chatElement.scrollHeight;
+    chatElement.appendChild(div);
+    chatElement.scrollTop = chatElement.scrollHeight
 }
 
 let painting = false;
