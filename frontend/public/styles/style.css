@@ -1,86 +1,87 @@
 :root {
-    --primary: #ff4757;
-    --secondary: #2f3542;
-    --bg: #f1f2f6;
-    --white: #ffffff;
+    --alabaster: #d8e2dc;
+    --powder: #ffe5d9;
+    --pastelPink: #ffcad4;
+    --cherry: #f4acb7;
+    --dusty: #9d8189;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
+    background-color: var(--powder);
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: var(--secondary);
 }
 
 h1 {
-    color: var(--primary);
+    color: var(--alabaster);
     font-size: 3rem;
     margin: 20px 0;
-    text-shadow: 2px 2px #ccc;
+    text-shadow: 2px 2px var(--dusty);
 }
 
-#formUsername {
-    background: var(--white);
+form#formUsername {
+    background: var(--alabaster);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    /* border */
 }
 
-#username,
-#msg {
+input#username,
+input#msg {
     padding: 12px;
     border: 2px solid #ddd;
     border-radius: 8px;
     outline: none;
 }
 
-#username:focus,
-#msg:focus {
-    border-color: var(--primary);
+input#username:focus,
+input#msg:focus {
+    border-color: var(--dusty);
 }
 
-.game-container {
+div.game-container {
     display: flex;
     gap: 20px;
     max-width: 1000px;
     margin-top: 20px;
 }
 
-.canvas-area {
-    background: var(--white);
+div.canvas-area {
+    background: var(--alabaster);
     padding: 15px;
     border-radius: 15px;
     box-shadow: 0, 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-#paintCanvas {
+canvas#paintCanvas {
     background-color: white;
     cursor: crosshair;
     border-radius: 10px;
     border: 2px solid #eee;
 }
 
-.score-bar {
+div.score-bar {
     margin-bottom: 10px;
     padding: 5px;
-    background: #e1f5fe;
+    background: #ECF1EE;
     border-radius: 8px;
 }
 
-.chat-area {
+div.chat-area {
     width: 300px;
     display: flex;
     flex-direction: column;
-    background: var(--white);
+    background: #FAD6DC;
     border-radius: 15px;
     padding: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-#chatbox {
+div#chatbox {
     height: 350px;
     overflow-y: auto;
     display: flex;
@@ -89,8 +90,9 @@ h1 {
     padding: 10px;
     border-bottom: 2px solid #f1f2f6;
 }
+
 .textMessage {
-    background: #f1f2f6;
+    background: var(--alabaster);
     padding: 10px;
     border-radius: 15px 15px 15px 2px;
     max-width: 80%;
@@ -100,7 +102,7 @@ h1 {
 
 .textMessage.other {
     align-self: flex-end;
-    background: #d1d8e0;
+    background: #B9A4AA;
     border-radius: 15px 15px 2px 15px;
 }
 
