@@ -37,12 +37,18 @@
                 <div id="chatbox"></div>
 
                 <form id="formMessage">
+                    <button type="button" id="emojiBtn">😊</button>
                     <input type="text" name="msg" id="msg" placeholder="Gissa ordet här..">
                     <input type="submit" value="Gissa">
                 </form>
+                <emoji-picker id="emojiPicker" style="display: none;"></emoji-picker>
             </div>
         </div>
     </section>
+
+
+    <script type="module" src="https://unpkg.com/emoji-picker-element@^1/index.js">
+    </script>
 
     <script src="scripts/code.js"></script>
 </body>

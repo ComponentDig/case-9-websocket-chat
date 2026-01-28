@@ -10,6 +10,8 @@ const chatElement = document.querySelector("div#chatbox");
 const usernameElement = document.querySelector("#username");
 const chatStage = document.querySelector("#chatStage");
 const onlineUsersElement = chatStage.querySelector("code");
+const emojiBtn = document.querySelector("#emojiBtn");
+const picker = document.querySelector("#emojiPicker");
 
 // DEPENDENCIES
 const websocket = new WebSocket("ws://localhost:8080");
@@ -245,7 +247,15 @@ canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mousemove", draw);
 
 
+// emoji picker eventlistener
+emojiBtn.addEventListener("click", () => {
+    picker.style.display = picker.style.display === "none" ? "block" : "none";
+});
 
+picker.addEventListener("emoji-click", event => {
+    msgElement.value += event.detail.unicode;
+    msgElement.focus();
+});
 
 
 
