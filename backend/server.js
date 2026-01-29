@@ -3,6 +3,7 @@ import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
 import fs from 'fs';
+import { nanoid } from 'nanoid';
 
 // VARIABLES
 const app = express();
@@ -108,7 +109,7 @@ app.post('/login', (req, res) => {
 
         // bekräfta om användarnamnet är okej
         // skicka ett objekt
-        res.send({ authenticated: true, username: username });
+        res.send({ authenticated: true, username: username, id: nanoid() });
     } else {
         res.send({ authenticated: false });
     }
