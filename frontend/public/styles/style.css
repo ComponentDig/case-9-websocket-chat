@@ -20,6 +20,10 @@ h1 {
     font-size: 3rem;
     margin: 20px 0;
     text-shadow: 2px 2px var(--dusty);
+    font-family: "Cherry Bomb One", sans-serif;
+    font-weight: 400;
+    font-size: 120px;
+    font-style: normal;
 }
 
 form#formUsername {
