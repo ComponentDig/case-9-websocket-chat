@@ -4,6 +4,7 @@
     --pastelPink: #ffcad4;
     --cherry: #f4acb7;
     --dusty: #9d8189;
+    --shadow: 2px 2px var(--dusty);
 }
 
 body {
@@ -19,7 +20,7 @@ h1 {
     color: var(--alabaster);
     font-size: 3rem;
     margin: 20px 0;
-    text-shadow: 2px 2px var(--dusty);
+    text-shadow: var(--shadow);
     font-family: "Cherry Bomb One", sans-serif;
     font-weight: 400;
     font-size: 120px;
@@ -30,8 +31,14 @@ form#formUsername {
     background: var(--alabaster);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
     /* border */
+}
+
+button#startBtn {
+    background-color: var(--dusty);
+    border-radius: 4px;
+    padding: 8px;
 }
 
 input#username,
@@ -58,7 +65,7 @@ div.canvas-area {
     background: var(--alabaster);
     padding: 15px;
     border-radius: 15px;
-    box-shadow: 0, 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 canvas#paintCanvas {
@@ -82,7 +89,7 @@ div.chat-area {
     background: #FAD6DC;
     border-radius: 15px;
     padding: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow);
 }
 
 div#chatbox {

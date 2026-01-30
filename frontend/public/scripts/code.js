@@ -215,7 +215,8 @@ function renderChatMessage(obj) {
     // visning av vem som vunnit
     if (obj.username === "MÄSTARE") {
         div.style.background = "#ffd700";
-        div.style.border = "2px solid orange";
+        div.style.border = "4px solid orange";
+        div.style.borderImage = "linear-gradient(135deg, #fff, #f2cb34, #ec6c03, #f2cb34, #ec6c03) 1";
         div.style.fontWeight = "bold";
         div.style.textAlign = "center";
     }
