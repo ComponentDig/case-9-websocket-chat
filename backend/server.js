@@ -31,7 +31,7 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 // array med 3-4 användare
-let users = ["Kim FukkaYoo", "JenniDooDoo", "Josefaan"];
+// let users = ["Kim FukkaYoo", "JenniDooDoo", "Josefaan"];
 
 // eventuellt hålla koll på vilka aktiva användare
 let usersOnline = [];
@@ -100,14 +100,8 @@ app.post('/login', (req, res) => {
 
     let username = req.body.username;
 
-    if (users.includes(username)) {
-        console.log("Användare finns");
-
-        // users = users.filter((u) => u != username);
-
-        // console.log("Användare som finns kvar:", users);
-
-        // bekräfta om användarnamnet är okej
+    // bör kolla mer, ex endast tillåtna tecken 
+    if (username.length > 2 && username.length < 10) {
         // skicka ett objekt
         res.send({ authenticated: true, username: username, id: nanoid() });
     } else {

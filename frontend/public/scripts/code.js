@@ -15,6 +15,9 @@ const picker = document.querySelector("#emojiPicker");
 
 // DEPENDENCIES
 const websocket = new WebSocket("ws://localhost:8080");
+import Player from "./Player.js";
+
+let player;
 
 // VARIABLES
 let username;
@@ -46,13 +49,16 @@ formUsername.addEventListener("submit", (e) => {
                 authenticated = true;
                 username = data.username;
 
+                // instansiera en ny 'player'
+                player = new Player(data.id, data.username);
+
                 console.log("authenticated", authenticated, "username", username);
 
                 usernameElement.setAttribute("disabled", true);
                 chatStage.classList.remove("hidden");
 
                 msgElement.focus();
-                const obj = { type: "new_user", username: username };
+                const obj = { type: "new_user", username: username, player: player };
                 websocket.send(JSON.stringify(obj));
             }
         });
