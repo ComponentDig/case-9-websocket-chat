@@ -52,6 +52,10 @@ formUsername.addEventListener("submit", (e) => {
                 // instansiera en ny 'player'
                 player = new Player(data.id, data.username);
 
+                // dölj inputfältet för användarnamn
+                formUsername.classList.add("hidden");
+                document.querySelector("p").classList.add("hidden");
+
                 console.log("authenticated", authenticated, "username", username);
 
                 usernameElement.setAttribute("disabled", true);
