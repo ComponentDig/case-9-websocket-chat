@@ -12,6 +12,13 @@ const chatStage = document.querySelector("#chatStage");
 const onlineUsersElement = chatStage.querySelector("div#scoreboard");
 const emojiBtn = document.querySelector("#emojiBtn");
 const picker = document.querySelector("#emojiPicker");
+const logoutBtn = document.querySelector("#logoutBtn");
+
+const logoutButton = () => {
+    location.reload();
+}
+
+logoutBtn.addEventListener("click", logoutButton);
 
 // DEPENDENCIES
 const websocket = new WebSocket("ws://localhost:8080");
@@ -24,6 +31,8 @@ let player;
 let username;
 let authenticated = false;
 let usersOnline = [];
+
+
 
 // EVENTLISTENER
 formUsername.addEventListener("submit", (e) => {
@@ -204,7 +213,7 @@ function renderScoreboard(onlineArray, scoresObj) {
         const points = currentScores[user] !== undefined ? currentScores[user] : 0;
         return `
         <div class="score-row" style="display: flex; justify-content: space-between; background: white; padding: 8px; margin-bottom: 5px; border-radius: 8px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
-                <span class="player-name">👤 ${user}</span>
+                <span class="player-name">${user}</span>
                 <span class="player-score" style="font-weight: bold; color: #5F7E6E;">${points}p</span>
             </div>
         `

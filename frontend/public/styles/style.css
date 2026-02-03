@@ -66,6 +66,20 @@ div.canvas-area {
     padding: 15px;
     border-radius: 15px;
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 15px;
+}
+
+button#logoutBtn {
+    align-items: flex-start;
+    background-color: #9d8189;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background 0.2s;
 }
 
 canvas#paintCanvas {
@@ -162,5 +176,5 @@ time {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #ddd; 
+    border-bottom: 2px solid #ddd;
 }
