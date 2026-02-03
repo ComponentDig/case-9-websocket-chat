@@ -5,7 +5,7 @@ Tårta
 Äpple
 Hamburgare
 Kaffe
-Korv med bröd
+Korv
 Ägg
 Ost
 Klubba
@@ -78,7 +78,7 @@ Pensel
 Kamera
 Ballong
 Hjärta
-Paket/Present
+Paket
 Flagga
 Pengar
 Krona
