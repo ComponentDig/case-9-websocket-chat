@@ -23,10 +23,11 @@
     <form id="formUsername" action="">
 
         <!-- se till att klienten begränsar möjligheten till ett användarnamn, ex attribut pattern -->
-        <input type="text" name="username" id="username" placeholder="Whats your name?" required minlength="3" maxlength="11">
+        <input type="text" name="username" id="username" placeholder="Whats your name?" required minlength="3"
+            maxlength="11">
 
         <!-- <input type="submit" value="Chatta"> -->
-         <button id="startBtn" type="submit" value="Chatta">Starta</button>
+        <button id="startBtn" type="submit" value="Chatta">Starta</button>
 
     </form>
 
@@ -35,8 +36,8 @@
         <div class="game-container">
             <div class="canvas-area">
                 <div class="score-bar">
-                    <h4>Online</h4>
-                    <code>...</code>
+                    <h4>Spelare & Poäng</h4>
+                    <div id="scoreboard" class="scoreboard-grid"></div>
                 </div>
                 <canvas id="paintCanvas" width="500" height="400"></canvas>
             </div>
@@ -57,6 +58,7 @@
 
     <script type="module" src="https://unpkg.com/emoji-picker-element@^1/index.js">
     </script>
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script> -->
 
     <script type="module" src="scripts/code.js"></script>
 </body>

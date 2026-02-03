@@ -9,19 +9,21 @@ const msgElement = document.querySelector("input#msg");
 const chatElement = document.querySelector("div#chatbox");
 const usernameElement = document.querySelector("#username");
 const chatStage = document.querySelector("#chatStage");
-const onlineUsersElement = chatStage.querySelector("code");
+const onlineUsersElement = chatStage.querySelector("div#scoreboard");
 const emojiBtn = document.querySelector("#emojiBtn");
 const picker = document.querySelector("#emojiPicker");
 
 // DEPENDENCIES
 const websocket = new WebSocket("ws://localhost:8080");
 import Player from "./Player.js";
+import { showConfetti } from "./confetti.js";
 
 let player;
 
 // VARIABLES
 let username;
 let authenticated = false;
+let usersOnline = [];
 
 // EVENTLISTENER
 formUsername.addEventListener("submit", (e) => {
@@ -114,13 +116,13 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "new_user":
-            onlineUsersElement.textContent = obj.usersOnline;
+            usersOnline = obj.usersOnline;
+            renderScoreboard(obj.usersOnline, obj.scores);
             break;
 
         case "user_left":
-
-            onlineUsersElement.textContent = obj.usersOnline;
-
+            // onlineUsersElement.textContent = obj.usersOnline;
+            renderScoreboard(obj.usersOnline, obj.scores);
             break;
 
         case "your_turn":
@@ -141,18 +143,20 @@ websocket.addEventListener("message", (e) => {
 
         case "correct_guess":
             renderChatMessage({
-                // username: 
                 msg: `Rätt gissat ${obj.username}. Ordet var: ${obj.word.toUpperCase()}`,
                 date: new Date()
             });
 
-            // uppdatera poäng visuellt för alla användare
-            let scoreDisplay = "Poäng: ";
-            for (let user in obj.scores) {
-                scoreDisplay += `${user}: ${obj.scores[user]}`
-            }
+            renderScoreboard(obj.usersOnline || usersOnline, obj.scores);
 
-            onlineUsersElement.textContent = JSON.stringify(obj.scores);
+
+            // uppdatera poäng visuellt för alla användare
+            // let scoreDisplay = "Poäng: ";
+            // for (let user in obj.scores) {
+            //     scoreDisplay += `${user}: ${obj.scores[user]}`
+            // }
+
+            // onlineUsersElement.textContent = JSON.stringify(obj.scores);
 
             // rensar canvas för nästa spelare att rita
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -179,7 +183,8 @@ websocket.addEventListener("message", (e) => {
                 date: new Date()
             });
 
-            onlineUsersElement.textContent = "Spelet är slut! Vinnare är: " + obj.winner;
+            renderScoreboard(usersOnline, obj.scores);
+            showConfetti();
             break;
 
 
@@ -188,6 +193,25 @@ websocket.addEventListener("message", (e) => {
 });
 
 // FUNCTIONS
+
+// rita upp scoreboarden
+function renderScoreboard(onlineArray, scoresObj) {
+    if (!onlineArray) return;
+
+    const currentScores = scoresObj || {};
+
+    onlineUsersElement.innerHTML = onlineArray.map(user => {
+        const points = currentScores[user] !== undefined ? currentScores[user] : 0;
+        return `
+        <div class="score-row" style="display: flex; justify-content: space-between; background: white; padding: 8px; margin-bottom: 5px; border-radius: 8px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
+                <span class="player-name">👤 ${user}</span>
+                <span class="player-score" style="font-weight: bold; color: #5F7E6E;">${points}p</span>
+            </div>
+        `
+    }).join('');
+}
+
+
 
 // funktion som kan rendera textmeddelande
 function renderChatMessage(obj) {
@@ -289,7 +313,6 @@ picker.addEventListener("emoji-click", event => {
     msgElement.value += event.detail.unicode;
     msgElement.focus();
 });
-
 
 
 

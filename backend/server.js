@@ -154,6 +154,8 @@ wss.on('connection', (ws) => {
                         // Gemini hjälpte till att hitta att jag glömt att broadcasta ut finishedObj
                         broadcast(wss, finishedObj);
 
+                        scores = {};
+
                     } else {
                         const winObj = {
                             type: "correct_guess",

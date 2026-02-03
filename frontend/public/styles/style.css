@@ -99,8 +99,8 @@ div#chatbox {
     flex-direction: column;
     gap: 10px;
     padding: 10px;
-    background-color: #FBE2E6; 
-    border-radius: 10px;    
+    background-color: #FBE2E6;
+    border-radius: 10px;
     border: 2px solid #eee;
     border-bottom: 2px solid #f1f2f6;
 }
@@ -144,4 +144,23 @@ time {
 
 .hidden {
     display: none;
+}
+
+.scoreboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 150px;
+    /* Gör att listan inte blir för lång */
+    overflow-y: auto;
+}
+
+.score-row {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ddd; 
 }
