@@ -49,7 +49,7 @@ formUsername.addEventListener("submit", (e) => {
     username = usernameElement.value;
 
     // asynkron fetch
-    const endpoint = "http://localhost:8080/login";
+    // const endpoint = "http://localhost:8080/login";
 
     const options = {
         method: "POST",
