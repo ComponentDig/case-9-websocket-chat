@@ -21,7 +21,15 @@ const logoutButton = () => {
 logoutBtn.addEventListener("click", logoutButton);
 
 // DEPENDENCIES
-const websocket = new WebSocket("ws://localhost:8080");
+// const websocket = new WebSocket("ws://localhost:8080");
+// Byt ut host-variabeln mot din nya Render-adress
+
+const backendHost = "case-9-websocket-chat.onrender.com";
+
+const websocket = new WebSocket(`wss://${backendHost}`);
+
+const endpoint = `https://${backendHost}/login`;
+
 import Player from "./Player.js";
 import { showConfetti } from "./confetti.js";
 
@@ -198,7 +206,7 @@ function renderScoreboard(onlineArray, scoresObj = {}) {
 
         onlineUsersElement.appendChild(row);
     });
-} 
+}
 
 function createScoreRow(username, points = 0) {
     const row = document.createElement("div");
