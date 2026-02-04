@@ -54,7 +54,6 @@ formUsername.addEventListener("submit", (e) => {
     fetch(endpoint, options)
         .then(res => res.json())
         .then((data) => {
-            console.log("data", data);
 
             if (data.authenticated === true) {
                 authenticated = true;
@@ -66,8 +65,6 @@ formUsername.addEventListener("submit", (e) => {
                 // dölj inputfältet för användarnamn
                 formUsername.classList.add("hidden");
                 document.querySelector("p").classList.add("hidden");
-
-                console.log("authenticated", authenticated, "username", username);
 
                 usernameElement.setAttribute("disabled", true);
                 chatStage.classList.remove("hidden");
@@ -81,8 +78,6 @@ formUsername.addEventListener("submit", (e) => {
 
 formMessage.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    console.log("yes yes yes");
 
     const msg = msgElement.value;
     const obj = { type: "text", msg: msg, username: username };
@@ -113,7 +108,6 @@ websocket.addEventListener("message", (e) => {
     const data = e.data;
 
     const obj = JSON.parse(e.data);
-    console.log("obj", obj);
 
     switch (obj.type) {
         case "text":
@@ -158,15 +152,6 @@ websocket.addEventListener("message", (e) => {
 
             renderScoreboard(obj.usersOnline || usersOnline, obj.scores);
 
-
-            // uppdatera poäng visuellt för alla användare
-            // let scoreDisplay = "Poäng: ";
-            // for (let user in obj.scores) {
-            //     scoreDisplay += `${user}: ${obj.scores[user]}`
-            // }
-
-            // onlineUsersElement.textContent = JSON.stringify(obj.scores);
-
             // rensar canvas för nästa spelare att rita
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
@@ -187,7 +172,7 @@ websocket.addEventListener("message", (e) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             renderChatMessage({
-                username: "MÄSTARE",
+                username: "WINNER",
                 msg: `GRATTIS ${obj.winner.toUpperCase()}! Du vann spelet`,
                 date: new Date()
             });
@@ -195,32 +180,57 @@ websocket.addEventListener("message", (e) => {
             renderScoreboard(usersOnline, obj.scores);
             showConfetti();
             break;
-
-
-
     }
 });
 
 // FUNCTIONS
 
 // rita upp scoreboarden
-function renderScoreboard(onlineArray, scoresObj) {
+function renderScoreboard(onlineArray, scoresObj = {}) {
     if (!onlineArray) return;
 
-    const currentScores = scoresObj || {};
+    onlineUsersElement.innerHTML = "";
 
-    onlineUsersElement.innerHTML = onlineArray.map(user => {
-        const points = currentScores[user] !== undefined ? currentScores[user] : 0;
-        return `
-        <div class="score-row" style="display: flex; justify-content: space-between; background: white; padding: 8px; margin-bottom: 5px; border-radius: 8px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
-                <span class="player-name">${user}</span>
-                <span class="player-score" style="font-weight: bold; color: #5F7E6E;">${points}p</span>
-            </div>
-        `
-    }).join('');
+    onlineArray.forEach(user => {
+        const points = scoresObj[user] ?? 0;
+
+        const row = createScoreRow(user, points);
+
+        onlineUsersElement.appendChild(row);
+    });
+} 
+
+function createScoreRow(username, points = 0) {
+    const row = document.createElement("div");
+    row.className = "score-row";
+
+    const name = document.createElement("span");
+    name.className = "player-name";
+    name.textContent = `${username}`;
+
+    const score = document.createElement("span");
+    score.className = "player-score";
+    score.textContent = `${points}p`;
+
+    row.append(name, score);
+    return row;
 }
 
+// function renderScoreboard(onlineArray, scoresObj) {
+//     if (!onlineArray) return;
 
+//     const currentScores = scoresObj || {};
+
+//     onlineUsersElement.innerHTML = onlineArray.map(user => {
+//         const points = currentScores[user] !== undefined ? currentScores[user] : 0;
+//         return `
+//         <div class="score-row" style="display: flex; justify-content: space-between; background: white; padding: 8px; margin-bottom: 5px; border-radius: 8px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
+//                 <span class="player-name">${user}</span>
+//                 <span class="player-score" style="font-weight: bold; color: #5F7E6E;">${points}p</span>
+//             </div>
+//         `
+//     }).join('');
+// }
 
 // funktion som kan rendera textmeddelande
 function renderChatMessage(obj) {
@@ -256,7 +266,7 @@ function renderChatMessage(obj) {
     div.appendChild(divUsename);
 
     // visning av vem som vunnit
-    if (obj.username === "MÄSTARE") {
+    if (obj.username === "WINNER") {
         div.style.background = "#ffd700";
         div.style.border = "4px solid orange";
         div.style.borderImage = "linear-gradient(135deg, #fff, #f2cb34, #ec6c03, #f2cb34, #ec6c03) 1";

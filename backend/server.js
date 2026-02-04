@@ -30,9 +30,6 @@ server.on("upgrade", (req, socket, head) => {
     });
 });
 
-// array med 3-4 användare
-// let users = ["Kim FukkaYoo", "JenniDooDoo", "Josefaan"];
-
 // eventuellt hålla koll på vilka aktiva användare
 let usersOnline = [];
 
@@ -171,12 +168,10 @@ wss.on('connection', (ws) => {
 
                     }
 
-
                     console.log(`Rätt gissat! ${obj.username}`);
 
                 } else {
                     broadcastExclude(wss, ws, obj);
-
                 }
 
                 break;
