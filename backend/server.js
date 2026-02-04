@@ -4,6 +4,7 @@ import http from 'http';
 import { WebSocketServer } from 'ws';
 import fs from 'fs';
 import { nanoid } from 'nanoid';
+import cors from 'cors';
 
 // VARIABLES
 const app = express();
@@ -11,6 +12,8 @@ const PORT = 8080;
 
 // STATIC FILES
 app.use(express.static('../frontend/public'));
+
+app.use(cors());
 
 // CREATE HTTP SERVER, express skickas med som en instans
 const server = http.createServer(app);
