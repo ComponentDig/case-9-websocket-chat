@@ -14,6 +14,7 @@ const emojiBtn = document.querySelector("#emojiBtn");
 const picker = document.querySelector("#emojiPicker");
 const logoutBtn = document.querySelector("#logoutBtn");
 
+// loggar ut från spelet, kommer tillbaka till startsidan
 const logoutButton = () => {
     location.reload();
 }
@@ -22,24 +23,21 @@ logoutBtn.addEventListener("click", logoutButton);
 
 // DEPENDENCIES
 // const websocket = new WebSocket("ws://localhost:8080");
-// Byt ut host-variabeln mot din nya Render-adress
 
+// adress till backend på render.com hosting
+// för deployment på netlify
 const backendHost = "case-9-websocket-chat.onrender.com";
-
 const websocket = new WebSocket(`wss://${backendHost}`);
-
 const endpoint = `https://${backendHost}/login`;
 
 import Player from "./Player.js";
 import { showConfetti } from "./confetti.js";
 
-let player;
-
 // VARIABLES
 let username;
 let authenticated = false;
 let usersOnline = [];
-
+let player;
 
 
 // EVENTLISTENER
@@ -48,7 +46,7 @@ formUsername.addEventListener("submit", (e) => {
 
     username = usernameElement.value;
 
-    // asynkron fetch
+    // asynkron fetch - utkommenterad för att få deployment att fungera
     // const endpoint = "http://localhost:8080/login";
 
     const options = {
@@ -67,10 +65,10 @@ formUsername.addEventListener("submit", (e) => {
                 authenticated = true;
                 username = data.username;
 
-                // instansiera en ny 'player'
                 player = new Player(data.id, data.username);
 
-                // dölj inputfältet för användarnamn
+                // dölj inputfältet för användarnamn efter att en spelar skrivit in 
+                // username och påbörjat spelet
                 formUsername.classList.add("hidden");
                 document.querySelector("p").classList.add("hidden");
 
@@ -105,18 +103,14 @@ formMessage.addEventListener("submit", (e) => {
     msgElement.focus();
 });
 
-// aktivera lyssnare på input#msg: kan användas för att visa att ngn skriver "...is typing"
-msgElement.addEventListener("keydown", (e) => {
-    console.log("...is typing", e.key);
-});
 
 let isMyTurn = false;
 
 websocket.addEventListener("message", (e) => {
-    const data = e.data;
 
     const obj = JSON.parse(e.data);
 
+    // switch-sats som kollar olika händelser från servern
     switch (obj.type) {
         case "text":
             renderChatMessage(obj);
@@ -132,7 +126,7 @@ websocket.addEventListener("message", (e) => {
             break;
 
         case "user_left":
-            // onlineUsersElement.textContent = obj.usersOnline;
+
             renderScoreboard(obj.usersOnline, obj.scores);
             break;
 
@@ -223,22 +217,6 @@ function createScoreRow(username, points = 0) {
     row.append(name, score);
     return row;
 }
-
-// function renderScoreboard(onlineArray, scoresObj) {
-//     if (!onlineArray) return;
-
-//     const currentScores = scoresObj || {};
-
-//     onlineUsersElement.innerHTML = onlineArray.map(user => {
-//         const points = currentScores[user] !== undefined ? currentScores[user] : 0;
-//         return `
-//         <div class="score-row" style="display: flex; justify-content: space-between; background: white; padding: 8px; margin-bottom: 5px; border-radius: 8px; box-shadow: 1px 1px 3px rgba(0,0,0,0.1);">
-//                 <span class="player-name">${user}</span>
-//                 <span class="player-score" style="font-weight: bold; color: #5F7E6E;">${points}p</span>
-//             </div>
-//         `
-//     }).join('');
-// }
 
 // funktion som kan rendera textmeddelande
 function renderChatMessage(obj) {
@@ -340,6 +318,3 @@ picker.addEventListener("emoji-click", event => {
     msgElement.value += event.detail.unicode;
     msgElement.focus();
 });
-
-
-
