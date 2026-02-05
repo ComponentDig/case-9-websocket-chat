@@ -22,13 +22,13 @@ const logoutButton = () => {
 logoutBtn.addEventListener("click", logoutButton);
 
 // DEPENDENCIES
-const websocket = new WebSocket("ws://localhost:8080");
+// const websocket = new WebSocket("ws://localhost:8080");
 
 // adress till backend på render.com hosting
 // för deployment på netlify
-// const backendHost = "case-9-websocket-chat.onrender.com";
-// const websocket = new WebSocket(`wss://${backendHost}`);
-// const endpoint = `https://${backendHost}/login`;
+const backendHost = "case-9-websocket-chat.onrender.com";
+const websocket = new WebSocket(`wss://${backendHost}`);
+const endpoint = `https://${backendHost}/login`;
 
 import Player from "./Player.js";
 import { showConfetti } from "./confetti.js";
@@ -47,7 +47,7 @@ formUsername.addEventListener("submit", (e) => {
     username = usernameElement.value;
 
     // asynkron fetch - utkommenterad för att få deployment att fungera
-    const endpoint = "http://localhost:8080/login";
+    // const endpoint = "http://localhost:8080/login";
 
     const options = {
         method: "POST",
