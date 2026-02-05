@@ -27,6 +27,40 @@ h1 {
     font-style: normal;
 }
 
+div.welcome-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    background: #FFF1EB;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    max-width: 500px;
+    margin: 40px auto;
+}
+
+div.welcome-message h3 {
+    color: var(--alabaster);
+    text-shadow: var(--shadow);
+    font-size: 3rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-family: "Cherry Bomb One", sans-serif;
+}
+
+div.welcome-message p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+div.welcome-message .sub-text {
+    font-size: 0.9rem;
+    margin-top: 15px;
+    font-style: italic;
+}
+
 form#formUsername {
     background: var(--alabaster);
     padding: 20px;
