@@ -24,10 +24,7 @@ const wss = new WebSocketServer({ noServer: true });
 // HANDSHAKE - godkänn kommunikation via websocket
 server.on("upgrade", (req, socket, head) => {
 
-    console.log("event upgrade...");
-
     wss.handleUpgrade(req, socket, head, (ws) => {
-        console.log("Client:", req.headers['user-agent']);
 
         wss.emit("connection", ws, req);
     });
@@ -167,12 +164,9 @@ wss.on('connection', (ws) => {
 
                         setTimeout(() => {
                             assignDrawer();
-                        }, 3000);
+                        }, 1000);
 
                     }
-
-                    console.log(`Rätt gissat! ${obj.username}`);
-
                 } else {
                     broadcastExclude(wss, ws, obj);
                 }
@@ -185,7 +179,7 @@ wss.on('connection', (ws) => {
                 usersOnline.push(obj.username);
                 obj.usersOnline = usersOnline;
 
-                // lägg till en egenskap till det obj som nu har kolla på klientkoppling
+                // lägg till en egenskap till det obj som nu har koll på klientkoppling
                 ws.username = obj.username;
 
                 broadcast(wss, obj);
@@ -204,7 +198,6 @@ wss.on('connection', (ws) => {
                 broadcastExclude(wss, ws, obj);
                 break;
         }
-        console.log(obj);
     });
 });
 // starta server 

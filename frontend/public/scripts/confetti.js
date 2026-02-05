@@ -10,8 +10,6 @@ export async function showConfetti() {
             emojis: ['🎉', '🌈', '🦄', '🏆'],
             confettiNumber: 100,
         });
-
-        console.log("Konfetti avfyrad via Skypack!");
     } catch (err) {
         console.error("Kunde inte ladda konfetti-biblioteket:", err);
     }

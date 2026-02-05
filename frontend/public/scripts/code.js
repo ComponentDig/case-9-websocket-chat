@@ -22,13 +22,13 @@ const logoutButton = () => {
 logoutBtn.addEventListener("click", logoutButton);
 
 // DEPENDENCIES
-// const websocket = new WebSocket("ws://localhost:8080");
+const websocket = new WebSocket("ws://localhost:8080");
 
 // adress till backend på render.com hosting
 // för deployment på netlify
-const backendHost = "case-9-websocket-chat.onrender.com";
-const websocket = new WebSocket(`wss://${backendHost}`);
-const endpoint = `https://${backendHost}/login`;
+// const backendHost = "case-9-websocket-chat.onrender.com";
+// const websocket = new WebSocket(`wss://${backendHost}`);
+// const endpoint = `https://${backendHost}/login`;
 
 import Player from "./Player.js";
 import { showConfetti } from "./confetti.js";
@@ -47,7 +47,7 @@ formUsername.addEventListener("submit", (e) => {
     username = usernameElement.value;
 
     // asynkron fetch - utkommenterad för att få deployment att fungera
-    // const endpoint = "http://localhost:8080/login";
+    const endpoint = "http://localhost:8080/login";
 
     const options = {
         method: "POST",
@@ -83,6 +83,7 @@ formUsername.addEventListener("submit", (e) => {
 });
 
 formMessage.addEventListener("submit", (e) => {
+    // förhindrar att webbläsaren laddar när skicka trycks
     e.preventDefault();
 
     const msg = msgElement.value;
@@ -130,6 +131,7 @@ websocket.addEventListener("message", (e) => {
             renderScoreboard(obj.usersOnline, obj.scores);
             break;
 
+        // sätter isMyTurn till true när nästa spelare ska rita
         case "your_turn":
             isMyTurn = true;
             renderChatMessage({
@@ -159,6 +161,8 @@ websocket.addEventListener("message", (e) => {
             ctx.beginPath();
             break;
 
+        // isMyTurn sätt till false för de som ska gissa vad som ritas
+        // nollställer canvasen efter varje runda
         case "new_round":
             isMyTurn = false;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -202,6 +206,8 @@ function renderScoreboard(onlineArray, scoresObj = {}) {
     });
 }
 
+// funktion för att rita ut username och points
+// med css klasser för snyggare UI
 function createScoreRow(username, points = 0) {
     const row = document.createElement("div");
     row.className = "score-row";
@@ -252,15 +258,17 @@ function renderChatMessage(obj) {
     div.appendChild(divUsename);
 
     // visning av vem som vunnit
+    // kommer upp som ett chattmeddelande
     if (obj.username === "WINNER") {
-        div.style.background = "#ffd700";
-        div.style.border = "4px solid orange";
+        div.style.background = "radial-gradient(circle, #ffffff 0%, #fff4d1 60%, #ffeb99 100%)";
+        div.style.border = "6px solid orange";
         div.style.borderImage = "linear-gradient(135deg, #fff, #f2cb34, #ec6c03, #f2cb34, #ec6c03) 1";
         div.style.fontWeight = "bold";
         div.style.textAlign = "center";
     }
 
     chatElement.appendChild(div);
+    // scrollar automatiskt när nya meddelanden skickas
     chatElement.scrollTop = chatElement.scrollHeight
 }
 
@@ -284,6 +292,7 @@ let lastY = 0;
 function draw(e) {
     if (!painting || !authenticated || !isMyTurn) return;
 
+    // getBoundingClientRect() - hittar exakt position för canvasen i webbläsaren
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -293,11 +302,14 @@ function draw(e) {
     websocket.send(JSON.stringify({ type: "draw", x, y }));
 }
 
+// funktion för att rita på canvas
 function drawOnCanvas(x, y) {
-    ctx.lineWidth = 5;
+    // stil och färg när spelare ritar
+    ctx.lineWidth =3;
     ctx.lineCap = "round";
     ctx.strokeStyle = "black";
 
+    // ritar linje från punkt till punkt
     ctx.lineTo(x, y);
     ctx.stroke();
     ctx.beginPath();
@@ -310,6 +322,7 @@ canvas.addEventListener("mousemove", draw);
 
 
 // emoji picker eventlistener
+// ternary operator för att visa och dölja emojirutan
 emojiBtn.addEventListener("click", () => {
     picker.style.display = picker.style.display === "none" ? "block" : "none";
 });
